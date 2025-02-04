@@ -108,7 +108,7 @@
 .about-box {
     flex: 1;
     padding: 30px;
-    background: #d1c5c5;
+    background: #f0f0f0;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
@@ -116,23 +116,24 @@
 
 /* Left (Mission) alignment */
 .about-box:first-child {
-    text-align: left;
+    text-align: center;
+    
 }
 
 /* Right (Vision) alignment */
 .about-box:last-child {
-    text-align: right;
+    text-align: center;
 }
 
 .about-box h3 {
     font-size: 1.8rem;
-    color: #000000;
+    color: #131212;
     margin-bottom: 15px;
 }
 
 .about-box p {
     font-size: 1rem;
-    color: #fff;
+    color: #131212;
     line-height: 1.6;
 }
 
@@ -251,43 +252,110 @@
             font-size: 16px;
             margin: 0;
         }
+/* Impact Section Styling */
+#impact {
+    background-color: #f9f9f9;
+    padding: 60px 20px;
+    text-align: center;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Prevents extra width from padding */
+}
 
-        /* Circular Impact Section Styling */
-        #impact {
-            background-color: #f9f9f9;
-            padding: 60px 20px;
-            text-align: center;
-        }
+/* Impact Container */
+.impact-container {
+    display: flex;
+    justify-content: center; /* Center items */
+    align-items: center;
+    flex-wrap: wrap; /* Wrap on small screens */
+    gap: 30px;
+    max-width: 1100px; /* Keeps it aligned with other sections */
+    /* width: 100%; Prevents extra width */
+    margin: auto; /* Centers the container */
+    padding: 0 20px; /* Prevents side overflow */
+    box-sizing: border-box;
+}
 
-        .impact-container {
-            display: flex;
-            justify-content: space-around;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
+/* Circular Impact Boxes */
+.impact-box {
+    background-color: #808080;
+    color: white;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: initial;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    min-width: 120px;
+}
 
-        .impact-box {
-            background-color: #808080;
-            color: white;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-size: 24px;
-        }
+/* Number Styling */
+.impact-box h3 {
+    font-size: 36px;
+    margin: 0;
+}
 
-        .impact-box h3 {
-            font-size: 36px;
-            margin: 0;
-        }
+/* Text Below the Number */
+.impact-box p {
+    font-size: 14px;
+    margin: 0;
+}
 
-        .impact-box p {
-            font-size: 14px;
-        }
+/* 🔹 Responsive Design for Tablets */
+@media (max-width: 768px) {
+    .impact-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+        padding: 0 10px; /* Adjusts padding for smaller screens */
+    }
+
+    .impact-box {
+        width: 130px;
+        height: 130px;
+        font-size: 20px;
+    }
+
+    .impact-box h3 {
+        font-size: 30px;
+    }
+
+    .impact-box p {
+        font-size: 12px;
+    }
+}
+
+/* 🔹 Extra Small Screens (Phones) */
+@media (max-width: 480px) {
+    .impact-container {
+        flex-direction: column; /* Stack boxes vertically */
+        align-items: center; /* Keep items centered */
+        gap: 15px;
+        padding: 0; /* Remove extra padding */
+    }
+
+    .impact-box {
+        width: 120px;
+        height: 120px;
+        font-size: 18px;
+    }
+
+    .impact-box h3 {
+        font-size: 26px;
+    }
+
+    .impact-box p {
+        font-size: 11px;
+    }
+}
+
+      
+
+        
 
         /* Facilities Section Styling */
         #facilities {
@@ -577,19 +645,19 @@
         <h2>Our Impact This Year</h2>
         <div class="impact-container">
             <div class="impact-box">
-                <h3>500+</h3>
+                <h3  class="count" data-target="500+">0</h3>
                 <p>Successful Surgeries</p>
             </div>
             <div class="impact-box">
-                <h3>10,000+</h3>
+                <h3  class="count" data-target="10,000+">0</h3>
                 <p>Patients Treated</p>
             </div>
             <div class="impact-box">
-                <h3>200+</h3>
+                <h3 class="count" data-target="200+">0</h3>
                 <p>Doctors & Specialists</p>
             </div>
             <div class="impact-box">
-                <h3>95%</h3>
+                <h3 class="count" data-target="95%">0</h3>
                 <p>Patient Satisfaction</p>
             </div>
         </div>
@@ -786,6 +854,51 @@
 
     
     <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll(".count");
+    let countingStarted = false; // Flag to track counting state
+
+    const startCounting = () => {
+        counters.forEach((counter) => {
+            counter.innerText = "0"; // Reset counter to 0
+
+            const updateCount = () => {
+                const target = parseInt(counter.getAttribute("data-target").replace(/[^0-9]/g, ""));
+                const count = parseInt(counter.innerText.replace(/[^0-9]/g, ""));
+                const increment = Math.ceil(target / 100); // Adjust speed
+
+                if (count < target) {
+                    counter.innerText = count + increment;
+                    setTimeout(updateCount, 20); // Smooth animation
+                } else {
+                    counter.innerText = counter.getAttribute("data-target"); // Ensure exact final number
+                }
+            };
+
+            updateCount();
+        });
+    };
+
+    // Intersection Observer to detect when the impact section is in view
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && !countingStarted) {
+                    startCounting(); // Start counting when section is visible
+                    countingStarted = true; // Prevent re-triggering
+                } else if (!entry.isIntersecting) {
+                    countingStarted = false; // Reset when out of view (optional)
+                }
+            });
+        },
+        { threshold: 0.5 } // Trigger when at least 50% of the section is visible
+    );
+
+    observer.observe(document.querySelector("#impact"));
+});
+
+
 
 function toggleMenu() {
             document.querySelector('.nav-links').classList.toggle('active');
